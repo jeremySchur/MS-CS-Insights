@@ -1,0 +1,14 @@
+digraph{
+	rankdir = LR
+	node [shape = box]
+	slack -> model
+	subgraph cluster0{
+		label = "server"
+		model [label = "sentiment analysis\n(hugging face?)"]
+		db [label = "database\nMySQL?"]
+		webserver [label = "frontend"]
+		model -> db
+		db -> webserver
+	}
+	webserver -> user
+}
