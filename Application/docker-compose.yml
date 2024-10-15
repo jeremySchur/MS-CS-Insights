@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  sentiment-analysis:
+    build: ./sentiment_analysis
+    container_name: sentiment_analysis_service
+    restart: always
+    command: python3 main.py
+    environment:
+      - SLACK_TOKEN=${SLACK_TOKEN}  # Fetch the Slack API key from .env
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=db  # Use the 'db' service as the host
+    depends_on:
+      db:
+        condition: service_healthy  # Wait for the 'db' service to be healthy before starting
+
+  backend:
+    build: ./backend
+    container_name: backend_service
+    restart: always
+    ports:
+      - "${BACKEND_PORT}:8000"  # Use port from .env
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=db  # Use the 'db' service as the host
+      - FRONTEND_URL=${FRONTEND_URL}  # Fetch the frontend URL from .env
+    volumes:
+      - ./backend/app:/server/app  # Mount the backend app directory so changes reflect inside container
+    depends_on:
+      db:
+        condition: service_healthy  # Wait for the 'db' service to be healthy before starting
+
+
+  frontend:
+    build: ./frontend
+    container_name: frontend_service
+    ports:
+      - "${FRONTEND_PORT}:8080"  # Use port from .env
+    depends_on:
+      - backend
+    environment:
+      - VITE_BACKEND_API_URL=${VITE_BACKEND_API_URL}  # Fetch the backend URL from .env
+    volumes:
+      - ./frontend/src:/web/src  # Mount the frontend src directory so changes reflect inside container
+
+  db:
+    image: postgres:17.0-bookworm
+    container_name: postgres_service
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}  # Fetch the Postgres user from .env
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}  # Fetch the Postgres password from .env
+    volumes:
+      - ./db:/var/lib/postgresql/data  # Mount the Postgres database volume
+      - ./init_db.sql:/docker-entrypoint-initdb.d/init.sql  # Mount the init.sql file to initialize the database
+    ports:
+      - "${POSTGRES_PORT}:5432"  # Use port from .env
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db:    # Define the volume for the Postgres database
