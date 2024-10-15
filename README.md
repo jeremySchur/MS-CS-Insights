@@ -17,5 +17,7 @@ To get started with this project, follow these steps:
       ```sh
       docker-compose up
       ```
-
-Your application should now be up and running!
+   - **Note**: The first docker-compose run may take time as it must download dependencies such as PyTorch.
+     
+4. **Access the Application**:
+   - Once the application is running, you can access it by navigating to [http://localhost:8080](http://localhost:8080) in your browser.
