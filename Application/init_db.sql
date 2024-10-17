@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS channel_sentiments (
 -- Create table of Messages for each Channel
 CREATE TABLE IF NOT EXISTS messages_sentiments (
     message_ts TIMESTAMP(3) PRIMARY KEY, -- Timestamp with milliseconds percision
+    message_text TEXT,
     sentiment_score DECIMAL(3, 2), -- Sentiment score between -1.00 and 1.00
     processed BOOLEAN, -- Indicates if this message has been analyzed
     channel_id TEXT,
