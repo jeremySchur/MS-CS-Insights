@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS channel (
 -- Create table of Messages
 CREATE TABLE IF NOT EXISTS message (
     ts TIMESTAMP(6) PRIMARY KEY, -- probably unique
-    text TEXT,
+    content TEXT,
     sentiment DECIMAL(3, 2), -- Sentiment score between -1.00 and 1.00
     user_id VARCHAR(13),
     channel_id VARCHAR(13) REFERENCES channel(id)
