@@ -19,7 +19,7 @@ def insert_messages(messages):
     with psycopg.connect(**DB_PARAMS) as conn:
         with conn.cursor() as cur:
             for message in messages:
-                cur.execute("INSERT INTO message (ts, text, sentiment, user_id, channel_id) VALUES (TO_TIMESTAMP(%(ts)s), %(text)s, %(sentiment)s, %(user_id)s, %(channel_id)s);", message)
+                cur.execute("INSERT INTO message (ts, content, sentiment, user_id, channel_id) VALUES (TO_TIMESTAMP(%(ts)s), %(text)s, %(sentiment)s, %(user_id)s, %(channel_id)s);", message)
         conn.commit()
 
 def update_timestamps(channels):
