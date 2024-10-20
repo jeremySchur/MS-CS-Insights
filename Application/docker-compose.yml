@@ -67,3 +67,5 @@ services:
 
 volumes:
   db:    # Define the volume for the Postgres database
+
+...
