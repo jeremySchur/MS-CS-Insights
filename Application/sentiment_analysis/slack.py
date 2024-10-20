@@ -1,6 +1,7 @@
 import os
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
+from postgres import insert_channel
 
 SLACK_TOKEN = os.getenv("SLACK_TOKEN")  # User token
 client = WebClient(token=SLACK_TOKEN)
@@ -14,9 +15,9 @@ def update_public_channels(channels):
     try:
         response = client.conversations_list(types="public_channel")
         for channel in response['channels']:
-            channels[channel['id']] = {"id": channel['id'], 
-                                       "name": channel['name'], 
-                                       "last_read_timestamp": channels.get(channel['id'], {}).get('last_read_timestamp', 0)}
+            if channel['id'] not in channels:
+                insert_channel(channel['id'], channel['name'])
+                channels[channel['id']] = {"name": channel['name']}
         # channels = [{"id": channel['id'], "name": channel['name'], "last_read_timestamp": 0} for channel in response['channels']]
         # Filter these by name to get specific course related channels (ask Dustin about naming conventions)
         return None
@@ -65,13 +66,14 @@ def process_message(message, channel_id, messages_list):
         :return: None
     """
     if message.get('type') == 'message' and not message.get('subtype'):
+        # Add the message to the messages list
+        messages_list.append({"user_id": message.get('user', ''),
+                              "channel_id": channel_id,
+                              "text": message.get('text', ''),
+                              "ts": message.get('ts', '')})
         # If the message has a thread, fetch and add replies
         if 'thread_ts' in message:
             fetch_and_add_replies(channel_id, message['thread_ts'], messages_list)
-        # Add the message to the messages list
-        messages_list.append({"user": message.get('user', ''),
-                              "text": message.get('text', ''),
-                              "ts": message.get('ts', '')})
 
     return None
 
@@ -91,7 +93,8 @@ def fetch_and_add_replies(channel_id, thread_ts, messages_list):
             if reply == replies_response.get('messages', [])[0]:
                 continue
             if reply.get('type') == 'message' and not reply.get('subtype'):
-                messages_list.append({"user": reply.get('user', ''),
+                messages_list.append({"user_id": reply.get('user', ''),
+                                      "channel_id": channel_id,
                                       "text": reply.get('text', ''),
                                       "ts": reply.get('ts', '')})
 
