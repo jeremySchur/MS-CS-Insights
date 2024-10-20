@@ -107,10 +107,10 @@ def get_all_messages(channels):
         :param channel_ids: List of channel IDs to fetch messages from
         :return: Dictionary containing the messages from each channel
     """
-    messages = {}
+    messages = []
     try:
         for channel_id, channel in channels.items():
-            messages[channel_id] = []
+            prev_len = len(messages)
             cursor = None
 
             while True:
@@ -122,7 +122,7 @@ def get_all_messages(channels):
 
                 # Process and store messages
                 for message in response.get('messages', []):
-                    process_message(message, channel_id, messages[channel_id])
+                    process_message(message, channel_id, messages)
 
                 # Pagination: break if there's no next cursor
                 if not response.get('has_more', False):
@@ -130,8 +130,8 @@ def get_all_messages(channels):
                 cursor = response['response_metadata'].get('next_cursor', None)
 
             # Update the timestamp of the last message fetched
-            if messages[channel_id]:
-                channel['last_read_timestamp'] = messages[channel_id][0]['ts']
+            if prev_len < len(messages):
+                channel['last_read_timestamp'] = messages[prev_len]['ts']
 
 
     except SlackApiError as e:

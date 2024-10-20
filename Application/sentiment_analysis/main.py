@@ -6,7 +6,7 @@ import json
 # Main function
 if __name__ == '__main__':
     # Get all public channels
-    channels = {}
+    channels = get_channels()
     while True:
         # Update the public channels
         update_public_channels(channels)
