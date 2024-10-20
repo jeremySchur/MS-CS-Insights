@@ -1,4 +1,4 @@
 transformers
 torch
 slack_sdk
-psycopg
+psycopg2-binary

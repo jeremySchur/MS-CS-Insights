@@ -1,4 +1,4 @@
-import psycopg
+import psycopg2
 import os
 # import json
 
@@ -16,7 +16,7 @@ def insert_messages(messages):
         :param messages: List of messages(a list of dictionaries)
         :return: None
     """
-    with psycopg.connect(**DB_PARAMS) as conn:
+    with psycopg2.connect(**DB_PARAMS) as conn:
         with conn.cursor() as cur:
             for message in messages:
                 cur.execute("INSERT INTO message (ts, content, sentiment, user_id, channel_id) VALUES (TO_TIMESTAMP(%(ts)s), %(text)s, %(sentiment)s, %(user_id)s, %(channel_id)s);", message)
@@ -28,7 +28,7 @@ def update_timestamps(channels):
         :param messages: List of messages(a list of dictionaries)
         :return: None
     """
-    with psycopg.connect(**DB_PARAMS) as conn:
+    with psycopg2.connect(**DB_PARAMS) as conn:
         with conn.cursor() as cur:
             for channel_id, channel in channels.items():
                 cur.execute("UPDATE channel SET last_read=TO_TIMESTAMP(%s) WHERE id = %s;", (channel.get("last_read_timestamp"), channel_id))
@@ -41,7 +41,7 @@ def get_channels():
         :return: channels object
     """
     channels = {}
-    with psycopg.connect(**DB_PARAMS) as conn:
+    with psycopg2.connect(**DB_PARAMS) as conn:
         with conn.cursor() as cur:
             cur.execute("SELECT id, name, EXTRACT(epoch FROM last_read) FROM channel;")
             for entry in cur:
@@ -54,7 +54,7 @@ def insert_channel(channel_id, channel_name):
         :param channel: channel dictionary
         :return: None
     """
-    with psycopg.connect(**DB_PARAMS) as conn:
+    with psycopg2.connect(**DB_PARAMS) as conn:
         with conn.cursor() as cur:
             cur.execute("INSERT INTO channel (id, name) VALUES (%s, %s);", (channel_id, channel_name))
         conn.commit()
@@ -65,10 +65,12 @@ def update_avg_sentiments():
         :params: None
         :return: None
     """
-    with psycopg.connect(**DB_PARAMS) as conn:
+    with psycopg2.connect(**DB_PARAMS) as conn:
         with conn.cursor() as cur:
             cur.execute("SELECT channel_id, AVG(sentiment), COUNT(sentiment) FROM message WHERE ts BETWEEN NOW() - interval '1 days' AND NOW() GROUP BY channel_id;")
-            for record in cur:
-                # print(record)
-                cur.execute("UPDATE channel SET avg_sentiment=%s WHERE id = %s;", (record[1], record[0]))
+            records = cur.fetchall()
+            
+            for record in records:
+                cur.execute("UPDATE channel SET avg_sentiment = %s WHERE id = %s;", (record[1], record[0]))
+            
             conn.commit()
