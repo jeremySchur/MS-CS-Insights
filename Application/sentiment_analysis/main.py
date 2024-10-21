@@ -27,7 +27,7 @@ def job():
     # update average sentiments
     update_avg_sentiments()
 
-    # print(json.dumps(messages, indent=4)) # Uncomment to see all messages
+    print(json.dumps(messages, indent=4)) # Uncomment to see all messages
     return None
 
 # Main function

@@ -1,5 +1,5 @@
 transformers
 torch
 slack_sdk
-psycopg2-binary
+psycopg
 schedule
