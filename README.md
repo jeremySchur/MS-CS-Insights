@@ -21,3 +21,7 @@ To get started with this project, follow these steps:
      
 4. **Access the Application**:
    - Once the application is running, you can access it by navigating to [http://localhost:8080](http://localhost:8080) in your browser.
+
+**Note about the Database**:
+   - You can hard reset the database by simply deleting the `/db` folder.
+
