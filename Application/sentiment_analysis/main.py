@@ -1,7 +1,7 @@
 from slack import update_public_channels, get_all_messages
 from analysis import analyze_sentiments
 from postgres import insert_messages, update_timestamps, get_channels, update_avg_sentiments
-from time import sleep
+from time import sleep, time, ctime
 import schedule
 import json
 
@@ -11,6 +11,7 @@ def job():
         :param None
         :return: None
     """
+    start_time = time()
     # Get all public channels
     channels = get_channels()
     # Update the public channels
@@ -27,12 +28,15 @@ def job():
     # update average sentiments
     update_avg_sentiments()
 
-    print(json.dumps(messages, indent=4)) # Uncomment to see all messages
+    end_time = time()
+    # print(json.dumps(messages, indent=4)) # Uncomment to see all messages
+    # print(str(ctime(end_time)))
+    print("Processed " + str(len(messages)) + " messages in " + str(end_time - start_time) + " seconds")
     return None
 
 # Main function
 if __name__ == '__main__':
-    schedule.every(60).seconds.do(job)   
+    schedule.every(60).seconds.do(job)
     while True:
         schedule.run_pending()
         sleep(1)
