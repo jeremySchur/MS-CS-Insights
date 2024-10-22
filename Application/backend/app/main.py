@@ -18,8 +18,8 @@ DB_PARAMS = {
 
 # Pydantic model for sentiment analysis data
 class SentimentAnalysis(BaseModel):
-    course: str
-    sentiment_score: float
+    name: str
+    avg_sentiment: float | None
 
 
 
@@ -42,7 +42,7 @@ async def root():
     cursor = conn.cursor()
 
     # Execute query to retrieve data
-    cursor.execute("SELECT course, sentiment_score FROM sentiment_analysis")
+    cursor.execute("SELECT name, avg_sentiment FROM channel")
     data = cursor.fetchall()
 
     # Close connection
@@ -50,25 +50,25 @@ async def root():
     conn.close()
 
     # Return the fetched data as a list of SentimentAnalysis objects
-    return [SentimentAnalysis(course=row[0], sentiment_score=row[1]) for row in data]
+    return [SentimentAnalysis(name=row[0], avg_sentiment=row[1]) for row in data]
 
-@app.post("/test", response_model=SentimentAnalysis)
-async def test(sa: SentimentAnalysis):
-    conn = psycopg2.connect(**DB_PARAMS)
-    cursor = conn.cursor()
+# @app.post("/test", response_model=SentimentAnalysis)
+# async def test(sa: SentimentAnalysis):
+#     conn = psycopg2.connect(**DB_PARAMS)
+#     cursor = conn.cursor()
 
-    # Execute query to insert data
-    cursor.execute(
-        "INSERT INTO sentiment_analysis (course, sentiment_score) VALUES (%s, %s)",
-        (sa.course, sa.sentiment_score)
-    )
+#     # Execute query to insert data
+#     cursor.execute(
+#         "INSERT INTO sentiment_analysis (course, sentiment_score) VALUES (%s, %s)",
+#         (sa.course, sa.sentiment_score)
+#     )
 
-    # Commit the transaction
-    conn.commit()
+#     # Commit the transaction
+#     conn.commit()
 
-    # Close connection
-    cursor.close()
-    conn.close()
+#     # Close connection
+#     cursor.close()
+#     conn.close()
 
-    # Return the inserted SentimentAnalysis object
-    return sa
+#     # Return the inserted SentimentAnalysis object
+#     return sa
