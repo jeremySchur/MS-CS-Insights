@@ -56,7 +56,7 @@ def insert_channel(channel_id, channel_name):
     """
     with psycopg.connect(**DB_PARAMS) as conn:
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO channel (id, name) VALUES (%s, %s);", (channel_id, channel_name))
+            cur.execute("INSERT INTO channel (id, name, avg_sentiment) VALUES (%s, %s, 0);", (channel_id, channel_name))
         conn.commit()
 
 def update_avg_sentiments():
