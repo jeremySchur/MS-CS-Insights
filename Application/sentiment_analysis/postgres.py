@@ -68,6 +68,6 @@ def update_avg_sentiments():
     with psycopg.connect(**DB_PARAMS) as conn:
         with conn.cursor() as cur:
             cur.execute("SELECT channel_id, AVG(sentiment), COUNT(sentiment) FROM message GROUP BY channel_id;")
-            for record in cur:
+            for record in cur.fetchall():
                 cur.execute("UPDATE channel SET avg_sentiment = %s WHERE id = %s;", (record[1], record[0]))
             conn.commit()
