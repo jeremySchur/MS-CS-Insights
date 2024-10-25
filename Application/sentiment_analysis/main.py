@@ -36,6 +36,7 @@ def job():
 
 # Main function
 if __name__ == '__main__':
+    job()
     schedule.every(60).seconds.do(job)
     while True:
         schedule.run_pending()
