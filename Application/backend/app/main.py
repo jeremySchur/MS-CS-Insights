@@ -22,8 +22,6 @@ class SentimentAnalysis(BaseModel):
     avg_sentiment: float | None
 
 
-
-
 # FastAPI app instance
 app = FastAPI()
 
