@@ -1,24 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-
-  <head>
+<head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MS-CS-Insights</title>
-    <link rel="stylesheet" href="css/index.css">
-  </head>
+    <title>Dashboard</title>
+    <style>
+      table {
+          width: 100%;
+          border-collapse: collapse;
+      }
+      th, td {
+          border: 1px solid #ddd;
+          padding: 8px;
+      }
+      th {
+          background-color: #f2f2f2;
+      }
+    </style>
+</head>
+<body>
+  <h1>Data Connection Status</h1>
+  <div id="data-container"></div>
+  <div id="card-container"></div>
+    
+  <script type = "module" src="js/index.js"></script>
+  <h2>Course List</h2>
+  <table id="data-table">
+    <thead>
+      <tr>
+        <th>Course Name</th>
+        <th>Sentiment</th>
+      </tr>
+    </thead>
+    <tbody>
 
-  <body>
-
-    <h1>Data from Backend</h1>
-    <div id="data-container">
-        <!-- Data from the backend will be displayed here -->
-    </div>
-    <button id="add-data">Add Data</button>
-
-
-    <script type="module" src="js/index.js"></script>
-  </body>
-
+    </tbody>
+  </table>
+</body>
 </html>
