@@ -25,3 +25,7 @@ To get started with this project, follow these steps:
 **Note about the Database**:
    - You can hard reset the database by simply deleting the `/db` folder.
 
+**Development Note**:
+   - Currently, messages are being fetched from Slack every day. The reason for this is that if you fetch too often, replies to messages are often missed. A day interval should give messages enough time to gather replies before they are read.
+
+
