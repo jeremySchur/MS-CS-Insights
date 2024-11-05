@@ -1,10 +1,13 @@
 import os
+import re
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 from postgres import insert_channel
 
 SLACK_TOKEN = os.getenv("SLACK_TOKEN")  # User token
 client = WebClient(token=SLACK_TOKEN)
+
+CHANNEL_REGEX = r'^csca\d{4}$'
 
 def update_public_channels(channels):
     """
@@ -15,11 +18,9 @@ def update_public_channels(channels):
     try:
         response = client.conversations_list(types="public_channel")
         for channel in response['channels']:
-            if channel['id'] not in channels:
+            if channel['id'] not in channels and re.search(CHANNEL_REGEX, channel['name']):
                 insert_channel(channel['id'], channel['name'])
                 channels[channel['id']] = {"name": channel['name']}
-        # channels = [{"id": channel['id'], "name": channel['name'], "last_read_timestamp": 0} for channel in response['channels']]
-        # Filter these by name to get specific course related channels (ask Dustin about naming conventions)
         return None
     except SlackApiError as e:
         print(f"Error fetching channel list: {e.response['error']}")
