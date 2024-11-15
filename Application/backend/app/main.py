@@ -6,7 +6,7 @@ from typing import List
 import os
 
 # Frontend URL
-FRONTEND_URL = os.getenv("FRONTEND_URL")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")  # Default to localhost:3000)
 # PostgreSQL connection parameters
 DB_PARAMS = {
     "dbname": os.getenv("POSTGRES_DB"),
@@ -20,6 +20,12 @@ DB_PARAMS = {
 class SentimentAnalysis(BaseModel):
     name: str
     avg_sentiment: float | None
+
+# Pydantic model for user login
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
 
 
 # FastAPI app instance
@@ -70,3 +76,23 @@ async def root():
 
 #     # Return the inserted SentimentAnalysis object
 #     return sa
+
+@app.post("/api/login")
+async def login(request: LoginRequest):
+    # Connect to the database
+    conn = psycopg2.connect(**DB_PARAMS)
+    cursor = conn.cursor()
+    
+    # Execute a query to find the user with the provided username and password
+    cursor.execute("SELECT * FROM users WHERE username = %s AND password = %s", (request.username, request.password))
+    user = cursor.fetchone()
+
+    # Close the database connection
+    cursor.close()
+    conn.close()
+
+    # Check if a matching user was found
+    if user:
+        return {"message": "Login successful"}
+    else:
+        raise HTTPException(status_code=401, detail="Incorrect username or password")

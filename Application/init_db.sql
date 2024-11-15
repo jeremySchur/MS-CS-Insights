@@ -20,17 +20,21 @@ CREATE TABLE IF NOT EXISTS message (
 
 
 
+-- NOTE: For this db to start existing in the db-volume folder
+-- I had to remove the db with
+-- rm -rf ./db/*
+-- Then restart docker
 
-
--- Previous db
-
-/*
-
--- Create the sentiment_analysis table
-CREATE TABLE IF NOT EXISTS sentiment_analysis (
-    id SERIAL PRIMARY KEY,
-    course TEXT NOT NULL,
-    sentiment_score REAL NOT NULL
+-- Create table for Users
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,        -- Auto-incrementing unique identifier
+    username VARCHAR(50) UNIQUE NOT NULL, -- Username with a maximum length of 50 characters
+    password VARCHAR(255) NOT NULL -- Password
 );
 
-*/
+-- Insert sample users for testing
+INSERT INTO users (username, password)
+VALUES 
+    ('jeremy', 'password123'),
+    ('sang', 'securepass'),
+    ('owen', 'admin123');
