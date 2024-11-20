@@ -4,6 +4,7 @@ services:
   sentiment-analysis:
     build: ./sentiment_analysis
     container_name: sentiment_analysis_service
+    platform: linux/amd64  
     restart: always
     command: python3 main.py
     environment:
