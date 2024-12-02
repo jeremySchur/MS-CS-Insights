@@ -3,3 +3,4 @@ torch
 slack_sdk
 psycopg[binary]
 schedule
+aiohttp

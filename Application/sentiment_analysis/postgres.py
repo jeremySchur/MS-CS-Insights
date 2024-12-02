@@ -19,7 +19,7 @@ def insert_messages(messages):
     with psycopg.connect(**DB_PARAMS) as conn:
         with conn.cursor() as cur:
             for message in messages:
-                cur.execute("INSERT INTO message (ts, content, sentiment, user_id, channel_id) VALUES (TO_TIMESTAMP(%(ts)s), %(text)s, %(sentiment)s, %(user_id)s, %(channel_id)s);", message)
+                cur.execute("INSERT INTO message (ts, content, sentiment, user_id, channel_id) VALUES (TO_TIMESTAMP(%(ts)s), %(text)s, %(sentiment)s, %(user_id)s, %(channel_id)s) ON CONFLICT (ts) DO UPDATE SET (content, sentiment, user_id, channel_id) = (EXCLUDED.content, EXCLUDED.sentiment, EXCLUDED.user_id, EXCLUDED.channel_id);", message)
         conn.commit()
 
 def update_timestamps(channels):
@@ -31,7 +31,8 @@ def update_timestamps(channels):
     with psycopg.connect(**DB_PARAMS) as conn:
         with conn.cursor() as cur:
             for channel_id, channel in channels.items():
-                cur.execute("UPDATE channel SET last_read=TO_TIMESTAMP(%s) WHERE id = %s;", (channel.get("last_read_timestamp"), channel_id))
+                if channel.get("last_read_timestamp"):
+                    cur.execute("UPDATE channel SET last_read=TO_TIMESTAMP(%s) WHERE id = %s;", (channel.get("last_read_timestamp"), channel_id))
         conn.commit()
 
 def get_channels():

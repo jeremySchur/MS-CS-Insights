@@ -4,6 +4,7 @@ from postgres import insert_messages, update_timestamps, get_channels, update_av
 from time import sleep, time, ctime
 import schedule
 import json
+import asyncio
 
 def job():
     """
@@ -16,10 +17,10 @@ def job():
     channels = get_channels()
     # Update the public channels
     update_public_channels(channels)
-    # print(json.dumps(channels, indent=4)) # Uncomment to see all channels
+    # print(json.dumps(channels, indent=2, default=str)) # Uncomment to see all channels
 
     # Get all messages from the public channels
-    messages = get_all_messages(channels)
+    messages = asyncio.run(get_all_messages(channels))
     analyze_sentiments(messages)
     # put messages in to db
     insert_messages(messages)
