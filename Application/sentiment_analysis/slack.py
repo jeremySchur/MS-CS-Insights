@@ -1,13 +1,11 @@
 import os
 import re
 import asyncio
-from slack_sdk import WebClient
 from slack_sdk.web.async_client import AsyncWebClient
 from slack_sdk.errors import SlackApiError
 from postgres import insert_channel
 
 SLACK_TOKEN = os.getenv("SLACK_TOKEN")  # User token
-# client = WebClient(token=SLACK_TOKEN)
 client = AsyncWebClient(token=SLACK_TOKEN)
 CHANNEL_REGEX = r'^csca\d{4}$'
 
@@ -37,6 +35,9 @@ def fetch_channel_messages(channel_id, cursor=None, oldest=0, limit=200):
         :param limit: Number of messages to fetch
         :return: promise for response containing the messages
     """
+    if oldest == None:
+        oldest = 0
+
     return client.conversations_history(
         channel=channel_id,
         cursor=cursor,
@@ -123,7 +124,6 @@ async def get_channel_messages(channel_id, channel):
                 cursor=cursor,
                 oldest=channel.get('last_read_timestamp')
             )
-            # print(response)
 
             # Process and store messages
             for message in response.get('messages', []):
@@ -143,7 +143,6 @@ async def get_all_messages(channels):
         :param channel: dictionary of channels to fetch messages from
         :return: list of messages from all channels
     """
-    channel_promises = []
     messages = []
     for channel_id, new_messages, ts in await asyncio.gather(*[
             get_channel_messages(channel_id, channel) for channel_id, channel in channels.items()]):
