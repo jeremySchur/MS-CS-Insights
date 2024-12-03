@@ -30,14 +30,57 @@ async function populateTable() {
     tableBody.innerHTML = ''; 
     
     for (let each_class of raw_data){
+
+        let sentiment = "";
+
+        if (each_class.avg_sentiment == 0){
+            sentiment = "Neutral";
+        }
+        else if (each_class.avg_sentiment > 0){
+            sentiment = "Positive";
+        }
+        else if (each_class.avg_sentiment < 0){
+            sentiment = "Negative";
+        }
+        else{
+            sentiment = "Channel Empty";
+        }
         const row = document.createElement('tr');
         row.innerHTML = `
         <td>${each_class.name}</td>
+        <td>${sentiment}</td>
         <td>${each_class.avg_sentiment}</td>
+        <td>${each_class.last_read}</td>
         `;
         tableBody.appendChild(row);
     }
 }
+
+// async function populateCard() {
+
+//     const raw_data = await fetchData();
+
+//     const mainBody = document.createElement('card-container');
+    
+//     for (let each_class of raw_data){
+//         const each_card = document.createElement('div');
+//         each_card.classList = 'card-body';
+//         const content = `
+//             <div class="card">
+//             <div class="card-header" id="card-container">
+//             </div>
+//                 <div class="card-body">
+//                     <h5>${each_class.title}</h5>
+//                     <p>${each_class.description}</p?
+//                 </div>
+//             </div>
+//         `;
+
+//         mainBody.innerHTML+=each_card;
+//     }
+//     alert("Data is Fetched!");
+// }
+
 
 populateTable(); 
 
