@@ -1,6 +1,5 @@
 const API_URL = import.meta.env.VITE_BACKEND_API_URL;
 
-
 async function fetchData() {
     try {
         const response = await fetch(API_URL);
@@ -17,8 +16,8 @@ async function fetchData() {
         return data;
 
     } catch (error) {
-        console.error('There was a problem with the fetch operation1', error);
-        document.getElementById('data-container').innerHTML = 'Failed to load data';
+        console.error('There was a problem with the fetch operation.', error);
+        document.getElementById('data-container').innerHTML = 'Failed to load data.';
     }
 }
 
@@ -46,11 +45,12 @@ async function populateTable() {
             sentiment = "Channel Empty";
         }
         const row = document.createElement('tr');
+        var timestamp = new Date(parseFloat(each_class.last_read) * 1000);
         row.innerHTML = `
         <td>${each_class.name}</td>
         <td>${sentiment}</td>
         <td>${each_class.avg_sentiment}</td>
-        <td>${each_class.last_read}</td>
+        <td>${timestamp}</td>
         `;
         tableBody.appendChild(row);
     }
@@ -80,7 +80,6 @@ async function populateTable() {
 //     }
 //     alert("Data is Fetched!");
 // }
-
 
 populateTable(); 
 

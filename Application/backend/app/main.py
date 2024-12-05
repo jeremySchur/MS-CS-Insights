@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import psycopg2
 from pydantic import BaseModel
+from datetime import datetime
 from typing import List
 import os
 
@@ -20,6 +21,7 @@ DB_PARAMS = {
 class SentimentAnalysis(BaseModel):
     name: str
     avg_sentiment: float | None
+    last_read: str | None
 
 
 # FastAPI app instance
@@ -40,7 +42,7 @@ async def root():
     cursor = conn.cursor()
 
     # Execute query to retrieve data
-    cursor.execute("SELECT name, avg_sentiment FROM channel")
+    cursor.execute("SELECT name, avg_sentiment, last_read FROM channel")
     data = cursor.fetchall()
 
     # Close connection
@@ -48,7 +50,7 @@ async def root():
     conn.close()
 
     # Return the fetched data as a list of SentimentAnalysis objects
-    return [SentimentAnalysis(name=row[0], avg_sentiment=row[1]) for row in data]
+    return [SentimentAnalysis(name=row[0], avg_sentiment=row[1], last_read=row[2]) for row in data]
 
 # @app.post("/test", response_model=SentimentAnalysis)
 # async def test(sa: SentimentAnalysis):
