@@ -1,5 +1,5 @@
 # Use an official Pytorch runtime as a parent image
-FROM pytorch/pytorch:2.5.0-cuda12.4-cudnn9-runtime
+FROM python:3.12-slim-bookworm
 
 # Set the working directory inside the container
 WORKDIR /app

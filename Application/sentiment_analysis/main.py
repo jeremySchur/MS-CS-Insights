@@ -3,8 +3,8 @@ from analysis import analyze_sentiments
 from postgres import insert_messages, update_timestamps, get_channels, update_avg_sentiments
 from time import sleep, time, ctime
 import schedule
-import json
 import asyncio
+# import json
 
 def job():
     """
@@ -31,14 +31,13 @@ def job():
 
     end_time = time()
     # print(json.dumps(messages, indent=4)) # Uncomment to see all messages
-    # print(str(ctime(end_time)))
     print("Processed " + str(len(messages)) + " messages in " + str(end_time - start_time) + " seconds")
     return None
 
 # Main function
 if __name__ == '__main__':
     job()
-    schedule.every(60).seconds.do(job)
+    schedule.every(60).seconds.do(job) # SET THIS TO 1 DAY OR MORE FOR ACTUAL USE (60 seconds is for testing purposes).
     while True:
         schedule.run_pending()
         sleep(1)
