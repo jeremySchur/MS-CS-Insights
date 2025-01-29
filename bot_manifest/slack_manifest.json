@@ -1,0 +1,42 @@
+{
+    "display_information": {
+        "name": "CS-MS-Insights",
+        "description": "Course monitoring for CS-MS with Coursera",
+        "background_color": "#000000"
+    },
+    "features": {
+        "bot_user": {
+            "display_name": "CS-MS-Insights",
+            "always_online": false
+        }
+    },
+    "oauth_config": {
+        "scopes": {
+            "user": [
+                "channels:history",
+                "channels:read"
+            ],
+            "bot": [
+                "channels:history",
+                "channels:join",
+                "channels:read",
+                "reactions:read"
+            ]
+        }
+    },
+    "settings": {
+        "event_subscriptions": {
+            "request_url": "https://simflection.ignorelist.com/slackecho.php",
+            "bot_events": [
+                "app_uninstalled",
+                "channel_created",
+                "message.channels",
+                "reaction_added",
+                "reaction_removed"
+            ]
+        },
+        "org_deploy_enabled": false,
+        "socket_mode_enabled": false,
+        "token_rotation_enabled": false
+    }
+}
