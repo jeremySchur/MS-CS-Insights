@@ -1,5 +1,5 @@
 # Get the base image
-FROM node:20.18.0-bookworm-slim
+FROM node:20.18-alpine
 
 # Set the working directory
 WORKDIR /web
@@ -12,9 +12,6 @@ RUN npm install
 
 # Copy the rest of the files
 COPY . .
-
-# Expose the port
-EXPOSE 8080
 
 # Run the app
 CMD ["npm", "run", "dev"]

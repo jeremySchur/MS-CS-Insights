@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.12-slim-bookworm
+FROM python:3.12-alpine
 
 # Set the working directory inside the container
 WORKDIR /server
@@ -13,9 +13,6 @@ ENV PYTHONUNBUFFERED=1
 
 # Copy the FastAPI app code into the container
 COPY /app .
-
-# Expose the FastAPI port
-EXPOSE 8000
 
 # Run the FastAPI server
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
