@@ -32,9 +32,9 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255) NOT NULL -- Password
 );
 
--- Insert sample users for testing
-INSERT INTO users (username, password)
-VALUES 
-    ('jeremy', 'password123'),
-    ('sang', 'securepass'),
-    ('owen', 'admin123');
+-- -- Insert sample users for testing
+-- INSERT INTO users (username, password)
+-- VALUES 
+--     ('jeremy', 'password123'),
+--     ('sang', 'securepass'),
+--     ('owen', 'admin123');

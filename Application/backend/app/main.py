@@ -4,6 +4,7 @@ import psycopg2
 from pydantic import BaseModel
 from typing import List
 import os
+import bcrypt
 
 # Frontend URL
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")  # Default to localhost:3000)
@@ -77,22 +78,60 @@ async def root():
 #     # Return the inserted SentimentAnalysis object
 #     return sa
 
-@app.post("/api/login")
-async def login(request: LoginRequest):
-    # Connect to the database
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+def hash_password(plain_text_password):
+    return bcrypt.hashpw(plain_text_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+def verify_password(plain_text_password, hashed_password):
+    return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_password.encode('utf-8'))
+
+def insert_dummy_users():
+    dummy_users = {
+        "jeremy": "password123",
+        "sang": "securepass",
+        "owen": "admin123"
+    }
+    
     conn = psycopg2.connect(**DB_PARAMS)
     cursor = conn.cursor()
-    
-    # Execute a query to find the user with the provided username and password
-    cursor.execute("SELECT * FROM users WHERE username = %s AND password = %s", (request.username, request.password))
-    user = cursor.fetchone()
 
-    # Close the database connection
+    for username, password in dummy_users.items():
+        cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+        if cursor.fetchone() is None:
+            hashed_password = hash_password(password)
+            cursor.execute("INSERT INTO users (username, password) VALUES (%s, %s)", (username, hashed_password))
+
+    conn.commit()
     cursor.close()
     conn.close()
 
-    # Check if a matching user was found
-    if user:
-        return {"message": "Login successful"}
+@app.on_event("startup")
+def startup_event():
+    insert_dummy_users()
+
+@app.post("/api/login")
+async def login(request: LoginRequest):
+    conn = psycopg2.connect(**DB_PARAMS)
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT password FROM users WHERE username = %s", (request.username,))
+    user = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    if user and verify_password(request.password, user[0]):
+        return {"message": "Login successful", "user": request.username}
     else:
         raise HTTPException(status_code=401, detail="Incorrect username or password")
+
+@app.get("/api/logout")
+async def logout():
+    return {"message": "User logged out"}
+
+@app.get("/api/force-logout")
+async def force_logout():
+    return {"message": "Forced logout on login page"}
