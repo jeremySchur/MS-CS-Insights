@@ -1,10 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import HTTPException
 import psycopg2
 from pydantic import BaseModel
 from typing import List
 import os
 import bcrypt
+
 
 # Frontend URL
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")  # Default to localhost:3000)
@@ -24,7 +26,7 @@ class SentimentAnalysis(BaseModel):
 
 # Pydantic model for user login
 class LoginRequest(BaseModel):
-    username: str
+    email: str
     password: str
 
 
@@ -79,7 +81,7 @@ async def root():
 #     return sa
 
 class LoginRequest(BaseModel):
-    username: str
+    email: str
     password: str
 
 def hash_password(plain_text_password):
@@ -90,19 +92,17 @@ def verify_password(plain_text_password, hashed_password):
 
 def insert_dummy_users():
     dummy_users = {
-        "jeremy": "password123",
-        "sang": "securepass",
-        "owen": "admin123"
+        "jeremy@jeremy.com": "password123",
     }
     
     conn = psycopg2.connect(**DB_PARAMS)
     cursor = conn.cursor()
 
-    for username, password in dummy_users.items():
-        cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+    for email, password in dummy_users.items():
+        cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
         if cursor.fetchone() is None:
             hashed_password = hash_password(password)
-            cursor.execute("INSERT INTO users (username, password) VALUES (%s, %s)", (username, hashed_password))
+            cursor.execute("INSERT INTO users (email, password) VALUES (%s, %s)", (email, hashed_password))
 
     conn.commit()
     cursor.close()
@@ -117,16 +117,16 @@ async def login(request: LoginRequest):
     conn = psycopg2.connect(**DB_PARAMS)
     cursor = conn.cursor()
     
-    cursor.execute("SELECT password FROM users WHERE username = %s", (request.username,))
+    cursor.execute("SELECT password FROM users WHERE email = %s", (request.email,))
     user = cursor.fetchone()
 
     cursor.close()
     conn.close()
 
     if user and verify_password(request.password, user[0]):
-        return {"message": "Login successful", "user": request.username}
+        return {"message": "Login successful", "user": request.email}
     else:
-        raise HTTPException(status_code=401, detail="Incorrect username or password")
+        raise HTTPException(status_code=401, detail="Incorrect email or password")
 
 @app.get("/api/logout")
 async def logout():

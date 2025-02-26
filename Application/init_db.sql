@@ -28,13 +28,6 @@ CREATE TABLE IF NOT EXISTS message (
 -- Create table for Users
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,        -- Auto-incrementing unique identifier
-    username VARCHAR(50) UNIQUE NOT NULL, -- Username with a maximum length of 50 characters
-    password VARCHAR(255) NOT NULL -- Password
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
 );
-
--- -- Insert sample users for testing
--- INSERT INTO users (username, password)
--- VALUES 
---     ('jeremy', 'password123'),
---     ('sang', 'securepass'),
---     ('owen', 'admin123');
