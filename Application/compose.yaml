@@ -2,7 +2,7 @@ services:
   sentiment-analysis:
     build: ./sentiment_analysis
     container_name: sentiment_analysis_service
-    command: python3 main.py
+    command: python3 src/main.py
     environment:
       - SLACK_TOKEN=${SLACK_TOKEN}  # Fetch the Slack API key from .env
       - POSTGRES_DB=postgres
