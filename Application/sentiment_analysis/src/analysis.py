@@ -24,10 +24,13 @@ def calculate_sentiment(message):
     
     # Convert sentiment label to a numerical score
     # Define a scale: Negative = -1, Neutral = 0, Positive = 1
-    if torch.argmax(probabilities).item() == 2:  # Assuming index 2 is 'Positive'
-        return probabilities[2].item()
+    sentiment = torch.argmax(probabilities).item()
+    if sentiment == 2:
+        return probabilities[2].item() - (probabilities[0].item() + probabilities[1].item())  # Positive - (Negative + Neutral)
+    elif sentiment == 1:
+        return 0 + probabilities[2].item() - probabilities[0].item()  # Neutral + Positive - Negative
     else:
-        return -probabilities[0].item()  # Assuming index 0 is 'Negative'
+        return -1 * (probabilities[0].item() - (probabilities[1].item() + probabilities[2].item())) # Negative - (Neutral + Positive)
 
 def analyze_sentiments(messages):
     """
