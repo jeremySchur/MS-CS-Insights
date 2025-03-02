@@ -1,20 +1,20 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig({
-  base: "/",
-  root: "./src",
-  preview: {
-    port: 8080,
-    strictPort: true,
-  },
+  plugins: [react(), tailwindcss()],
+  root: 'src',
   server: {
     port: 8080,
     strictPort: true,
     host: true,
-    origin: "http://0.0.0.0:8080",
     watch: {
       usePolling: true,
-    },
- },
-})
+    }
+  },
+  build: {
+    outDir: '../dist'
+  }
+});

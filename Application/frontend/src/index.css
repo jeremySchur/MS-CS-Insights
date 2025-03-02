@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+    --color-primary: #072635;
+    --color-highlight: #D8FCF7;
+}
+
+@layer utilities {
+    .scroll-container::-webkit-scrollbar {
+      width: 6px;
+    }
+  
+    .scroll-container::-webkit-scrollbar-track {
+      background: #E3E4E6; 
+      border-radius: 3px;
+    }
+  
+    .scroll-container::-webkit-scrollbar-thumb {
+      background: #072635; 
+      border-radius: 3px;
+      max-height: 10px;
+    }
+  }
