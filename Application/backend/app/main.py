@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import HTTPException
+from fastapi.responses import RedirectResponse
+
 import psycopg2
 from pydantic import BaseModel
 from typing import List
@@ -135,3 +137,11 @@ async def logout():
 @app.get("/api/force-logout")
 async def force_logout():
     return {"message": "Forced logout on login page"}
+
+
+
+
+
+@app.get("/forgot-password")
+async def forgot_password():
+    return RedirectResponse(url=f"{FRONTEND_URL}/forgot-password.html")

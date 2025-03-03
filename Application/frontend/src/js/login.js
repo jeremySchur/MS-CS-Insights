@@ -26,3 +26,7 @@ async function handleLogin(event) {
 }
 
 document.getElementById('login-form').addEventListener('submit', handleLogin);
+document.querySelector('a[href="forgot-password.html"]').addEventListener('click', function (event) {
+    event.preventDefault();
+    window.location.href = 'forgot-password.html';
+});
