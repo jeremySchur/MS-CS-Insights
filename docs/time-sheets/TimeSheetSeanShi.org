@@ -1,0 +1,54 @@
+#+author: Sean Shi
+
+** 2025-01-26 to 2025-02-01
+| Task            | Sunday | Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Week Total |
+|-----------------+--------+--------+---------+-----------+----------+--------+----------+------------|
+| Lecture         |        |    1.5 |         |           |          |        |          |        1.5 |
+| Sponsor Meeting |        |        |         |           |          |        |          |          0 |
+| TA Meeting      |        |        |         |       0.5 |          |        |          |        0.5 |
+| Work on Charts  |        |        |         |           |        1 |        |          |          1 |
+| Daily Total     |      0 |    1.5 |       0 |       0.5 |        1 |      0 |        0 |         3. |
+#+TBLFM: @>$<<..@>$>>=vsum(@<<..@>>)::$>=vsum($<<..$>>)
+
+** 2025-02-02 to 2025-02-08
+| Task                    | Sunday | Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Week Total |
+|-------------------------+--------+--------+---------+-----------+----------+--------+----------+------------|
+| Lecture                 |        |    1.5 |         |           |          |        |          |        1.5 |
+| Sponsor Meeting         |        |        |         |       0.5 |          |        |          |        0.5 |
+| TA Meeting              |        |        |         |           |          |        |          |          0 |
+| Work on Charts          |        |        |         |           |          |        |          |          0 |
+| Research Coursera api's |        |        |         |           |          |        |          |          0 |
+| Goal Setting            |        |        |         |           |        1 |        |          |          1 |
+| Daily Total             |      0 |    1.5 |       0 |       0.5 |        1 |      0 |        0 |         3. |
+#+TBLFM: @>$<<..@>$>>=vsum(@<<..@>>)::$>=vsum($<<..$>>)
+** 2025-02-09 to 2025-02-15
+| Task                          | Sunday | Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Week Total |
+|-------------------------------+--------+--------+---------+-----------+----------+--------+----------+------------|
+| Lecture                       |        |    1.5 |         |           |          |        |          |        1.5 |
+| Sponsor Meeting               |        |        |         |           |          |        |          |          0 |
+| TA Meeting                    |        |        |         |       0.5 |          |        |          |        0.5 |
+| meeting for ethics assignment |        |        |         |         1 |          |        |          |          1 |
+| Work on Charts                |        |        |         |           |          |        |          |          0 |
+| Research Coursera api's       |        |        |         |         1 |          |        |          |          1 |
+| Daily Total                   |      0 |    1.5 |       0 |       2.5 |        0 |      0 |        0 |         4. |
+#+TBLFM: @>$<<..@>$>>=vsum(@<<..@>>)::$>=vsum($<<..$>>)
+** 2025-02-16 to 2025-02-22
+| Task                    | Sunday | Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Week Total |
+|-------------------------+--------+--------+---------+-----------+----------+--------+----------+------------|
+| Lecture                 |        |      0 |         |           |          |        |          |          0 |
+| Sponsor Meeting         |        |        |         |       0.5 |          |        |          |        0.5 |
+| TA Meeting              |        |        |         |           |          |        |          |          0 |
+| Work on Charts          |        |        |       1 |           |        1 |        |          |          2 |
+| Research Coursera api's |        |        |         |           |          |        |          |          0 |
+| Daily Total             |      0 |      0 |       1 |       0.5 |        1 |      0 |        0 |        2.5 |
+#+TBLFM: @>$<<..@>$>>=vsum(@<<..@>>)::$>=vsum($<<..$>>)
+** 2025-02-23 to 2025-03-01
+| Task                    | Sunday | Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Week Total |
+|-------------------------+--------+--------+---------+-----------+----------+--------+----------+------------|
+| Lecture                 |        |    1.5 |         |           |          |        |          |        1.5 |
+| Sponsor Meeting         |        |        |         |           |          |        |          |          0 |
+| TA Meeting              |        |        |         |       0.5 |          |        |          |        0.5 |
+| Work on Charts          |        |        |         |           |          |        |          |          0 |
+| Research Coursera api's |        |        |         |         1 |          |        |          |          1 |
+| Daily Total             |      0 |    1.5 |       0 |       1.5 |        0 |      0 |        0 |         3. |
+#+TBLFM: @>$<<..@>$>>=vsum(@<<..@>>)::$>=vsum($<<..$>>)

@@ -30,15 +30,13 @@ async function populateTable() {
     
     for (let each_class of raw_data){
 
-        let sentiment = "";
+        let sentiment = "Neutral";
 
-        if (each_class.avg_sentiment == 0){
-            sentiment = "Neutral";
-        }
-        else if (each_class.avg_sentiment > 0){
+        // Somewhat random values
+        if (each_class.avg_sentiment > 0.3){
             sentiment = "Positive";
         }
-        else if (each_class.avg_sentiment < 0){
+        else if (each_class.avg_sentiment < -0.3){
             sentiment = "Negative";
         }
         else{
@@ -47,13 +45,66 @@ async function populateTable() {
         const row = document.createElement('tr');
         var timestamp = new Date(parseFloat(each_class.last_read) * 1000);
         row.innerHTML = `
-        <td>${each_class.name}</td>
+        <td><a href="/course?name=${each_class.name}">${each_class.name}</a></td>
         <td>${sentiment}</td>
         <td>${each_class.avg_sentiment}</td>
         <td>${timestamp}</td>
         `;
         tableBody.appendChild(row);
     }
+    populateCharts(raw_data);
+}
+
+async function populateCharts(courses) {
+    if (!courses){
+        // empty list
+        return
+    }
+    courses.sort((a,b) => b.num_messages -  a.num_messages)
+    const max_messages = courses[0].num_messages
+    console.log(max_messages)
+    const container = document.getElementById('charts');
+    courses.forEach(function(course, index, array){
+        if (!course.num_messages){
+            return
+        }
+        const node = document.createElement("div")
+        const canvas = document.createElement("canvas")
+        node.appendChild(canvas)
+        const height = `${10 + 30 * Math.sqrt(course.num_messages / max_messages)}vh`
+        node.style.height = height
+        node.style.width = height
+        console.log(node.style.height)
+        container.appendChild(node)
+        const chart = new Chart(canvas, {
+            type: 'pie',
+            data: {
+                labels: ['Positive', 'Negative', 'Neutral'],
+                datasets: [{
+                    label: '# of Messages',
+                    data: [course.num_positive, course.num_negative, course.num_messages - course.num_positive - course.num_negative],
+                    borderWidth: 1,
+                    backgroundColor: ["#22aa22", '#aa2222', '#888888']
+                }]
+            },
+            options: {
+                animation: false,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: course.name
+                    },
+                    legend: {
+                        display: false,
+                    }
+                },
+                onClick: (events, elements, chart) => {
+                    window.location.href = `/course?name=${course.name}`
+                }
+            }
+        });
+    })
 }
 
 // async function populateCard() {

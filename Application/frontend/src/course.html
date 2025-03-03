@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- TODO: consider replacing with local link -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+  <p id="data-container"></p>
+  <div id="ends" style="display:flex; flex-direction: row">
+    <!-- <input type="text" id="start"></input> -->
+    <!-- <input type="text" id="end"></input> -->
+    <p id="start"></p>
+    <p>---</p>
+    <p id="end"></p>
+  </div>
+  <div id="charts"><canvas id="scatter"></canvas></div>
+  <script>
+    const searchParams = new URLSearchParams(window.location.search);
+    const course_name = searchParams.get('name');
+    console.log()
+    const API_URL = `%VITE_BACKEND_API_URL%/course?name=${course_name}` // syntax in html file
+
+    async function fetchData() {
+        try {
+            const response = await fetch(API_URL);
+
+            // Check if the response is successful
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+
+            const dataContainer = document.getElementById('data-container');
+            dataContainer.innerHTML = 'Data is Successfully Fetched.';
+            return data;
+
+        } catch (error) {
+            console.error('There was a problem with the fetch operation.', error);
+            document.getElementById('data-container').innerHTML = 'Failed to load data.';
+        }
+    }
+    async function createGraphs() {
+        const data = await fetchData()
+        const oldest = new Date(parseFloat(data[data.length - 1].ts) * 1000);
+        const newest = new Date(parseFloat(data[0].ts) * 1000);
+        document.getElementById('start').innerHTML = oldest;
+        document.getElementById('end').innerHTML = newest;
+        const scatter = document.getElementById('scatter');
+        const chart = new Chart(scatter, {
+            type: 'scatter',
+            data: {
+                datasets: [{data:data.map((m) => ({
+                    x: new Date(parseFloat(m.ts) * 1000),
+                    y: m.score,
+                    content: m.content,
+                }))}]
+            },
+            options: {
+                animation: false,
+                scales: {
+                    x: {
+                        type: "time"
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: course_name
+                    }
+                }
+            }
+        })
+    }
+    createGraphs()
+  </script>
+</body>
+</html>

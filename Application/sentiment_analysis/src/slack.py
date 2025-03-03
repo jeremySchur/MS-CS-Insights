@@ -91,7 +91,18 @@ async def fetch_and_add_replies(channel_id, thread_ts, messages_list):
     """
     reply_cursor = None
     while True:
-        replies_response = await fetch_replies(channel_id, thread_ts, reply_cursor)
+        try:
+            replies_response = await fetch_replies(channel_id, thread_ts, reply_cursor)
+        except SlackApiError as e:
+            if e.response.status_code == 429:
+                # The `Retry-After` header will tell you how long to wait before retrying
+                delay = int(e.response.headers.get('Retry-After', 60))
+                print(f"Rate limited. Retrying in {delay} seconds")
+                await asyncio.sleep(delay)
+                continue
+            else:
+                # other errors
+                raise e
         for reply in reversed(replies_response.get('messages', [])):
             # Skip the first message (original thread message)
             if reply == replies_response.get('messages', [])[0]:
