@@ -2,8 +2,7 @@ services:
   sentiment-analysis:
     build: ./sentiment_analysis
     container_name: sentiment_analysis_service
-    restart: always
-    command: python3 main.py
+    command: python3 src/main.py
     environment:
       - SLACK_TOKEN=${SLACK_TOKEN}  # Fetch the Slack API key from .env
       - POSTGRES_DB=postgres
@@ -17,7 +16,6 @@ services:
   backend:
     build: ./backend
     container_name: backend_service
-    restart: always
     ports:
       - "${BACKEND_PORT}:8000"  # Use port from .env
     environment:
@@ -46,7 +44,7 @@ services:
       - ./frontend/src:/web/src  # Mount the frontend src directory so changes reflect inside container
 
   db:
-    image: postgres:17.0-bookworm
+    image: postgres:17-alpine
     container_name: postgres_service
     environment:
       POSTGRES_USER: ${POSTGRES_USER}  # Fetch the Postgres user from .env

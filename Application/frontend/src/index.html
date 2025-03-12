@@ -5,41 +5,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Quicksand">
     <style>
+      body {
+        font-family: 'Quicksand';
+      }
       table {
+          border-collapse: collapse;
+          margin: 20px 0;
+          font-size: 0.8em;
+          min-width: 350px;
+          overflow: hidden;
           margin-left: auto;
           margin-right: auto;
-          box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-          min-width: 350px;
-          margin: 20px 0;
-          font-size: 0.9em;
-          border-radius: 6px 6px 0 0;
-          border-collapse: collapse;
-          font-family: Arial, Helvetica, sans-serif ;
-          overflow: hidden;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);        
+          border-radius: 6px 6px 0 0;    
+          font-family:'Quicksand';       
       }
-      table tbody tr:nth-of-type(even) {
-        background-color: #f3f3f3;
-      }
+
       table thead tr {
           background-color: #25a5c8;
           color: #ffffff;
           text-align: center;
+          font-weight: bold;
       }
+
+    
       table th,
       table td {
           padding: 12px 15px;
       }
+
+    
+
+      table tbody tr:nth-of-type(even) {
+        background-color: #d2cfcf;
+      }
+
       table tbody tr:last-of-type {
       border-bottom: 2px solid #833ef1;
       }
+
+      table tbody tr:hover {
+        background-color: rgb(133, 130, 130);
+      }
+
       table tbody tr {
           border-bottom: 1px solid #dddddd;
       }
-      table tbody tr.active-row {
-      font-weight: bold;
-      color: #2aa4e2;
-      }
+
       .center {
       margin-left: auto;
       margin-right: auto;
@@ -50,12 +65,15 @@
 </head>
 
 <body>
-  <h1>Data Connection Status</h1>
-  <div id="data-container"></div>
+  <h1><center>Coursera MS CS Insights</center></h1>
+  <p id="data-container"></p>
   <script src="js/index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 
   <script type = "module" src="js/index.js"></script>
-  <h2>Course List</h2>
+  <h2><center>Message Breakdown</center></h2>
+  <div id="charts" style="display:flex; flex-direction: row"><center></center></div>
+  <h2><center>Course List</center></h2>
   <table id="data-table">
     <thead>
       <tr>
