@@ -3,3 +3,5 @@ uvicorn
 psycopg2-binary
 bcrypt
 pyjwt
+sendgrid
+python-dotenv
